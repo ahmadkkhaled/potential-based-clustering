@@ -19,5 +19,8 @@
         this.mass = mass;
     }
 
-
+    public override string ToString()
+    {
+        return $"x:{x}, y:{y}, stretch_x:{stretch_x}, stretch_y:{stretch_y}, rotation:{rotation}, mass:{mass}";
+    }
 }
