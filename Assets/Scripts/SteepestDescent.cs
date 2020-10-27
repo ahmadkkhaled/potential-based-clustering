@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public static class SteepestDescent
 {
@@ -116,6 +117,8 @@ public static class SteepestDescent
         {
             double totalGradientPotentialX = CauchyTotalGradientPotentialX(x, y);
             double totalGradientPotentialY = CauchyTotalGradientPotentialY(x, y);
+
+            Assert.IsFalse(totalGradientPotentialX == 0 && totalGradientPotentialY == 0);
 
             x -= steepPace * totalGradientPotentialX / Math.Sqrt(totalGradientPotentialX * totalGradientPotentialX + totalGradientPotentialY * totalGradientPotentialY);
             y -= steepPace * totalGradientPotentialY / Math.Sqrt(totalGradientPotentialX * totalGradientPotentialX + totalGradientPotentialY * totalGradientPotentialY);
