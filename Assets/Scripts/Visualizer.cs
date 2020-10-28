@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class Visualizer : MonoBehaviour
 {
+    private int idx = 0;
+    private List<GameObject> rocks;
+    public GameObject rockPrefab;
+    
+
     // returns the index of the dataPoint which is nearest to Vector2 coordinate
     private int GetNearest(List<DataPoint> dataPoints, Vector2 coordinate) // TODO optimize
     {
@@ -27,7 +32,7 @@ public class Visualizer : MonoBehaviour
         string dataPath = Application.dataPath + "/Datasets/iris.csv";
         DataReader.FillData(dataPoints, dataPath);
 
-        List<Vector2> order = new List<Vector2>();
+        List<Vector2> order = new List<Vector2>(); // TODO change from list to array because size is known beforehand
         while (dataPoints.Any()) // FIXME SteepestDescent returns NaN when there are no unique coordinates in dataPoints
         {
             if(dataPoints.Count == 1)
@@ -42,12 +47,31 @@ public class Visualizer : MonoBehaviour
 
             int nearest = GetNearest(dataPoints, steps.Last());
 
-            order.Add(new Vector2((float)dataPoints[nearest].x, (float)dataPoints[nearest].y));
+            order.Add(dataPoints[nearest].ToVector2());
 
             dataPoints.RemoveAt(nearest); // TODO optimize using dictionary or boolean visited array
         }
 
         for(int i = 0; i < order.Count; i++)
             Debug.Log("order[" + i + "] = " + order[i]);
+
+        rocks = new List<GameObject>();
+        foreach(Vector2 coordinate in order)
+        {
+            rocks.Add(Instantiate(rockPrefab, 15.0f * new Vector3(coordinate.x, coordinate.y, UnityEngine.Random.Range(0.5f, 5.0f)), Quaternion.identity));
+        }
+
+        StartCoroutine(DestroyCoroutine());
+    }
+
+    private System.Collections.IEnumerator DestroyCoroutine()
+    {
+        while(idx < rocks.Count)
+        {
+            Debug.Log(idx);
+            Destroy(rocks[idx]);
+            idx++;
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }
