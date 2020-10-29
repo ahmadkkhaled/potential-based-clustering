@@ -6,8 +6,13 @@ public class Visualizer : MonoBehaviour
 {
     private int idx = 0;
     private List<GameObject> rocks;
+
     public GameObject rockPrefab;
-    
+    public float distanceRatio = 1.0f;
+    public Transform trail;
+    public float trailSpeed;
+    public Material glow;
+    bool isGlowing = false;
 
     // returns the index of the dataPoint which is nearest to Vector2 coordinate
     private int GetNearest(List<DataPoint> dataPoints, Vector2 coordinate) // TODO optimize
@@ -58,20 +63,43 @@ public class Visualizer : MonoBehaviour
         rocks = new List<GameObject>();
         foreach(Vector2 coordinate in order)
         {
-            rocks.Add(Instantiate(rockPrefab, 15.0f * new Vector3(coordinate.x, coordinate.y, UnityEngine.Random.Range(0.5f, 5.0f)), Quaternion.identity));
+            rocks.Add(Instantiate(rockPrefab, distanceRatio * new Vector3(coordinate.x, coordinate.y, UnityEngine.Random.Range(0.5f, 5.0f)), Quaternion.identity));
         }
 
-        StartCoroutine(DestroyCoroutine());
+        StartCoroutine(Visualize());
     }
 
-    private System.Collections.IEnumerator DestroyCoroutine()
+    private System.Collections.IEnumerator Visualize()
     {
         while(idx < rocks.Count)
         {
-            Debug.Log(idx);
-            Destroy(rocks[idx]);
-            idx++;
-            yield return new WaitForSeconds(0.5f);
+            Debug.Log(idx); 
+            if (!isGlowing)
+            {
+                rocks[idx].GetComponent<MeshRenderer>().material = glow;
+                isGlowing = true;
+            }
+
+            float distance = Vector3.Distance(trail.position, rocks[idx].transform.position);
+            Debug.Log(distance);
+            if (distance <= 1.0f)
+            {
+                yield return new WaitForSeconds(1.0f);
+                Destroy(rocks[idx]);
+                idx++;
+                isGlowing = false;
+            }
+            else
+            {
+                trail.position = Vector3.MoveTowards(trail.position, rocks[idx].transform.position, trailSpeed * Time.deltaTime);
+                yield return null;
+            }
         }
+    }
+
+
+    private void Orbit(Transform current, Transform target) /// current orbits around target
+    {
+        current.RotateAround(target.position, new Vector3(0.1f, 0.1f, 0.1f), 500.0f * Time.deltaTime);
     }
 }
