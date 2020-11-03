@@ -11,13 +11,14 @@ public static class DataReader
 
             double sepal_length = double.Parse(parsedLine[0]);
             double sepal_width = double.Parse(parsedLine[1]);
+            string type = parsedLine[4];
 
             /*
              * Rotation = 0 
              * Stretch (both x and y) = 1 
              * Mass = 1
              */
-            dataPoints.Add(new DataPoint(sepal_length, sepal_width, 1, 1, 0, 1));
+            dataPoints.Add(new DataPoint(sepal_length, sepal_width, 1, 1, 0, 1, type));
         }
     } 
 }

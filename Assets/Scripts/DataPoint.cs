@@ -6,10 +6,11 @@ public class DataPoint
     public double stretch_x, stretch_y;
     public double rotation;
     public double mass;
+    public string type;
 
     public DataPoint() { }
 
-    public DataPoint(double x, double y, double stretch_x, double stretch_y, double rotation, double mass)
+    public DataPoint(double x, double y, double stretch_x, double stretch_y, double rotation, double mass, string type)
     {
         this.x = x;
         this.y = y;
@@ -19,6 +20,8 @@ public class DataPoint
 
         this.rotation = rotation;
         this.mass = mass;
+
+        this.type = type;
     }
 
     public override string ToString()
