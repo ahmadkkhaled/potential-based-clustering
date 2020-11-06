@@ -6,8 +6,8 @@ public class Visualizer : MonoBehaviour
 {
     private int idx = 0;
     private List<GameObject> vDataPoints;
-    private string dataPath;
     private GameObject trail;
+    private List<DataPoint> dataPoints;
 
     public GameObject rockPrefab, trailPrefab;
     public float distanceRatio = 1.0f;
@@ -20,9 +20,6 @@ public class Visualizer : MonoBehaviour
     {
         idx = 0;
         vDataPoints = new List<GameObject>(); // vDataPoints is a list of GameOjbects (prefix 'v' is for visualized)
-
-        List<DataPoint> dataPoints = new List<DataPoint>();
-        DataReader.FillData(dataPoints, dataPath);
 
         // mapping each type to a material index assuming number of unique types is less than number of materials
         int materialIndex = 0;
@@ -80,11 +77,12 @@ public class Visualizer : MonoBehaviour
 
     private void Update()
     {
-        dataPath = canvas.GetComponent<FileExplorer>().Path;
-        if (!string.IsNullOrEmpty(dataPath))
+        if (GetComponent<DataReader>().isDataReady)
         {
+            dataPoints = new List<DataPoint>();
+            GetComponent<DataReader>().Populate(dataPoints);
             Visualize();
-            canvas.GetComponent<FileExplorer>().ClearPath();
+            GetComponent<DataReader>().isDataReady = false;
         }
     }
     private System.Collections.IEnumerator Animate()
