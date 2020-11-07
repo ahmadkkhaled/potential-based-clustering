@@ -7,6 +7,10 @@ public class MouseLook : MonoBehaviour
 
     private float rotationAroundX = 0.0f;
     private float rotationAroundY = 0.0f;
+    private int zoom = 20;
+    private int normalFOV = 60;
+    private float smooth = 5f;
+    private bool isZoomed = false;
 
     // Start is called before the first frame update
     void Start()
@@ -26,5 +30,14 @@ public class MouseLook : MonoBehaviour
 
         playerBody.localRotation = Quaternion.Euler(rotationAroundX, rotationAroundY, 0f); /// assign not update
 
+        // camera zoom
+        Camera camera = GetComponent<Camera>();
+        if (Input.GetMouseButtonDown(1))
+            isZoomed = !isZoomed;
+
+        if (isZoomed)
+            camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, zoom, smooth * Time.deltaTime);
+        else
+            camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, normalFOV, smooth * Time.deltaTime); 
     }
 }
