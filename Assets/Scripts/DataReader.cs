@@ -63,7 +63,9 @@ public class DataReader : MonoBehaviour
 
     public void ReadData() // ImportButton::OnClick()
     {
-        dataPath = UnityEditor.EditorUtility.OpenFilePanel("Select Dataset", "", "csv");
+#if UNITY_EDITOR
+        dataPath = UnityEditor.EditorUtility.OpenFilePanel("Select Dataset", "", "csv"); // TODO: replace UnityEditor.EditorUtility File Explorer function with a function independent of UnityEditor
+#endif
         if (string.IsNullOrEmpty(dataPath))
         {
             isDataReady = false;
