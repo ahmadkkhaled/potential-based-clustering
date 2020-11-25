@@ -12,12 +12,6 @@ public class MouseLook : MonoBehaviour
     private float smooth = 5f;
     private bool isZoomed = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        // TODO: handle mouse lock and unlock
-    }
-
     // Update is called once per frame
     void Update()
     {
