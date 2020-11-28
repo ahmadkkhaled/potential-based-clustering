@@ -37,6 +37,11 @@ public class DataReader : MonoBehaviour
     public GameObject mappingPanel;
     public bool isDataReady = false;
 
+    private void Start()
+    {
+        mappingPanel.SetActive(false);
+    }
+
     private void Initialize()
     {
         isDataReady = false;
