@@ -107,8 +107,10 @@ public static class SteepestDescent
         }
         return totalGradientPotential;
     }
-    
-    public static Vector2[] Run(List<DataPoint> dataPoints, double x, double y, double steepPace, uint count)
+
+    // runs steepest descent for {ucount} steps with initial coordinates {x, y} and learning rate equal to {steepPace}
+    // returns a list of coordinates {Vector2[]} all the traversed points during the run of steepest descent
+    public static Vector2[] Run(in List<DataPoint> dataPoints, double x, double y, double steepPace, uint count) 
     {
         _dataPoints = dataPoints;
 
@@ -126,5 +128,21 @@ public static class SteepestDescent
             steps[i] = new Vector2((float)x, (float)y);
         }
         return steps;
+    }
+
+    private static double CauchyPotential(double x, double y, DataPoint dataPoint)
+    {
+        return -dataPoint.mass * CauchyDensity(x, y, dataPoint);
+    }
+
+    public static double CauchyTotalPotential(in List<DataPoint> dataPoints, double x, double y) // returns the cauchy total potential at {x, y} with respect to a list of data points {dataPoints}
+    {
+        _dataPoints = dataPoints;
+        double totalPotential = 0;
+        foreach(DataPoint point in dataPoints)
+        {
+            totalPotential += CauchyPotential(x, y, point);
+        }
+        return totalPotential;
     }
 }
