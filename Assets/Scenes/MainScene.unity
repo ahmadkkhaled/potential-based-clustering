@@ -704,7 +704,8 @@ MonoBehaviour:
   rockPrefab: {fileID: 128944, guid: a233330d3364a5944bbb4055ddfea91e, type: 3}
   trailPrefab: {fileID: 6926684365308381525, guid: f3178470da83042488b074af4f3934af,
     type: 3}
-  distanceRatio: 50
+  XZ_Scale: 50
+  Y_Scale: 10
   trailSpeed: 25
   colors:
   - {fileID: 2100000, guid: 2a5d772a0dbe33843a7bf6a6be426597, type: 2}

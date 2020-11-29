@@ -10,7 +10,8 @@ public class Visualizer : MonoBehaviour
     private List<DataPoint> dataPoints;
 
     public GameObject rockPrefab, trailPrefab;
-    public float distanceRatio = 1.0f;
+    public float XZ_Scale = 1.0f; // the scale multiplied by the {x,z} coordinates of 3D instantiated datapoint
+    public float Y_Scale = 1.0f;  // the scale multiplied by the {y} coordinate of a 3D instantiated datapoint
     public float trailSpeed = 25f;
     public Material[] colors; // After building the project as an exe, the number of colors is gonna be restricted to at most X amount of colors
     public float animationSpeed = 1.0f;
@@ -61,7 +62,11 @@ public class Visualizer : MonoBehaviour
         // instantiate datapoints
         foreach (DataPoint dataPoint in order)
         {
-            GameObject vPoint = Instantiate(rockPrefab, distanceRatio * new Vector3((float)dataPoint.x, 0, (float)dataPoint.y), Quaternion.identity);
+            double y = SteepestDescent.CauchyTotalPotential(order, dataPoint.x, dataPoint.y);
+            double x = dataPoint.x;
+            double z = dataPoint.y;
+            Vector3 position = new Vector3(XZ_Scale * (float)x, Y_Scale * (float)y, XZ_Scale * (float)z);
+            GameObject vPoint = Instantiate(rockPrefab, position, Quaternion.identity);
 
             int colorIndex = typeToColor[dataPoint.type];
             vPoint.GetComponent<MeshRenderer>().material = colors[colorIndex];
